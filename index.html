@@ -164,6 +164,204 @@ body {
   position: relative;
   overflow: hidden;
 }
+
+/* ── Steps ── */
+.step {
+  display: none;
+}
+.step.active { display: block; }
+
+.step-title {
+  font-family: 'Cardo', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--dark);
+}
+.step-subtitle {
+  font-size: 0.95rem;
+  color: #7a7d84;
+  margin-bottom: 28px;
+}
+
+/* ── Slider Input ── */
+.slider-group { margin-bottom: 24px; }
+.slider-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--blue);
+  text-align: center;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+.slider-value span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #999;
+}
+.slider-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+.slider-input-wrap label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #aaa;
+  white-space: nowrap;
+}
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--blue) 0%, #e0e2e8 0%);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(0,174,239,0.3);
+  cursor: grab;
+  transition: box-shadow 0.2s;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 2px 14px rgba(0,174,239,0.5);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: 3px solid var(--white);
+  box-shadow: 0 2px 8px rgba(0,174,239,0.3);
+  cursor: grab;
+}
+.manual-input {
+  width: 100px;
+  padding: 8px 12px;
+  border: 2px solid #e0e2e8;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--dark);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.manual-input:focus { border-color: var(--blue); }
+
+/* ── Option Cards ── */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.option-card {
+  background: var(--bg);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 18px 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+  position: relative;
+}
+.option-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(161,203,206,0.25);
+}
+.option-card.selected {
+  border-color: var(--blue);
+  background: #eaf7fd;
+  box-shadow: 0 4px 16px rgba(0,174,239,0.15);
+}
+.option-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: var(--blue);
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E");
+  background-size: 14px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.option-icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+.option-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+.option-desc {
+  font-size: 0.78rem;
+  color: #999;
+  line-height: 1.4;
+}
+
+/* ── Buttons ── */
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  gap: 12px;
+}
+.btn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 32px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-next {
+  background: var(--blue);
+  color: var(--white);
+  margin-left: auto;
+}
+.btn-next:hover {
+  background: #009ad6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,174,239,0.3);
+}
+.btn-next:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.btn-back {
+  background: transparent;
+  color: #888;
+  padding: 14px 20px;
+}
+.btn-back:hover { color: var(--dark); }
 </style>
 </head>
 <body>
@@ -201,7 +399,61 @@ body {
 
   <!-- Wizard Card -->
   <div class="card" id="wizardCard">
-  </div>
+
+    <!-- Step 1: Square Footage -->
+    <div class="step active" id="step1">
+      <div class="step-title">How big is your home?</div>
+      <div class="step-subtitle">Enter your approximate total square footage.</div>
+      <div class="slider-group">
+        <div class="slider-value" id="sqftDisplay">2,000 <span>sq ft</span></div>
+        <div class="slider-input-wrap">
+          <label>800</label>
+          <input type="range" id="sqftSlider" min="800" max="5000" step="50" value="2000">
+          <label>5,000</label>
+        </div>
+        <div style="text-align:center; margin-top:14px;">
+          <input type="number" class="manual-input" id="sqftManual" value="2000" min="800" max="5000" placeholder="sq ft">
+        </div>
+      </div>
+      <div class="btn-row">
+        <span></span>
+        <button class="btn btn-next" onclick="goToStep(2)">Next <span>&rarr;</span></button>
+      </div>
+    </div>
+
+    <!-- Step 2: Stories -->
+    <div class="step" id="step2">
+      <div class="step-title">How many stories?</div>
+      <div class="step-subtitle">Taller homes require more labor and safety equipment.</div>
+      <div class="options-grid" id="storiesGrid">
+        <div class="option-card" data-value="1" onclick="selectOption('stories', this)">
+          <div class="option-icon">&#127968;</div>
+          <div class="option-label">1 Story</div>
+          <div class="option-desc">Single level / ranch</div>
+        </div>
+        <div class="option-card" data-value="1.5" onclick="selectOption('stories', this)">
+          <div class="option-icon">&#127969;</div>
+          <div class="option-label">1.5 Stories</div>
+          <div class="option-desc">Split level / cape cod</div>
+        </div>
+        <div class="option-card" data-value="2" onclick="selectOption('stories', this)">
+          <div class="option-icon">&#127970;</div>
+          <div class="option-label">2 Stories</div>
+          <div class="option-desc">Standard two level</div>
+        </div>
+        <div class="option-card" data-value="2.5" onclick="selectOption('stories', this)">
+          <div class="option-icon">&#127971;</div>
+          <div class="option-label">2+ Stories</div>
+          <div class="option-desc">Multi-level / tall</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="goToStep(1)">&larr; Back</button>
+        <button class="btn btn-next" id="btn2" disabled onclick="goToStep(3)">Next <span>&rarr;</span></button>
+      </div>
+    </div>
+
+  </div><!-- /card -->
 
 </div><!-- /container -->
 
