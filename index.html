@@ -441,6 +441,214 @@ input[type="range"]::-moz-range-thumb {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(0,174,239,0.35);
 }
+
+/* ── Results ── */
+.results-section { display: none; }
+.results-section.active { display: block; }
+
+.price-hero {
+  text-align: center;
+  padding: 36px 24px;
+  background: linear-gradient(135deg, var(--dark) 0%, #35383f 100%);
+  border-radius: var(--radius);
+  color: var(--white);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.price-hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(0,174,239,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.price-hero-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+}
+.price-hero-range {
+  font-family: 'Cardo', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.price-hero-range .dash {
+  color: var(--teal);
+  margin: 0 6px;
+  font-weight: 400;
+}
+.price-note {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.breakdown-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 28px 20px;
+  margin-bottom: 20px;
+}
+.breakdown-title {
+  font-family: 'Cardo', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--dark);
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f1f4;
+}
+.breakdown-row:last-child { border-bottom: none; }
+.breakdown-row-label {
+  font-size: 0.92rem;
+  color: #5a5d63;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.breakdown-row-label .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.breakdown-row-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--dark);
+}
+.breakdown-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0 4px;
+  border-top: 2px solid var(--dark);
+  margin-top: 4px;
+}
+.breakdown-total-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--dark);
+}
+.breakdown-total-value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--blue);
+}
+
+.ok-note {
+  background: linear-gradient(135deg, #eaf7fd, #f0faf8);
+  border-left: 4px solid var(--teal);
+  border-radius: 0 14px 14px 0;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ok-note-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ok-note-text {
+  font-size: 0.88rem;
+  color: #444;
+  line-height: 1.55;
+}
+.ok-note-text strong { color: var(--dark); }
+
+.comparison-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+}
+.comparison-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 16px;
+}
+.comparison-bars { display: flex; flex-direction: column; gap: 14px; }
+.comparison-item-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 5px;
+}
+.comparison-bar-bg {
+  height: 10px;
+  background: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.comparison-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 0;
+}
+.comparison-bar-fill.yours { background: var(--blue); }
+.comparison-bar-fill.avg { background: var(--teal); }
+.comparison-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* ── Start Over ── */
+.start-over {
+  text-align: center;
+  margin-top: 16px;
+}
+.start-over button {
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #999;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.start-over button:hover { color: var(--dark); }
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 24px 20px;
+  font-size: 0.78rem;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+}
+.footer a { color: var(--blue); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -672,7 +880,78 @@ input[type="range"]::-moz-range-thumb {
 
   </div><!-- /card -->
 
+  <!-- Results -->
+  <div class="results-section" id="resultsSection">
+
+    <div class="price-hero" id="priceHero">
+      <div class="price-hero-label">Your Estimated Roof Cost</div>
+      <div class="price-hero-range" id="priceRange">$0 <span class="dash">&ndash;</span> $0</div>
+      <div class="price-note">Based on your inputs and current Oklahoma market rates</div>
+    </div>
+
+    <div class="breakdown-card">
+      <div class="breakdown-title">Cost Breakdown</div>
+      <div class="breakdown-row">
+        <span class="breakdown-row-label"><span class="dot" style="background:var(--blue)"></span> Materials</span>
+        <span class="breakdown-row-value" id="bkMaterials">-</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-row-label"><span class="dot" style="background:var(--teal)"></span> Labor</span>
+        <span class="breakdown-row-value" id="bkLabor">-</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-row-label"><span class="dot" style="background:#f0c040"></span> Tear-Off &amp; Prep</span>
+        <span class="breakdown-row-value" id="bkTearoff">-</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="breakdown-row-label"><span class="dot" style="background:#e07050"></span> Disposal &amp; Cleanup</span>
+        <span class="breakdown-row-value" id="bkDisposal">-</span>
+      </div>
+      <div class="breakdown-total">
+        <span class="breakdown-total-label">Estimated Total</span>
+        <span class="breakdown-total-value" id="bkTotal">-</span>
+      </div>
+    </div>
+
+    <div class="ok-note">
+      <div class="ok-note-icon">&#9888;&#65039;</div>
+      <div class="ok-note-text">
+        <strong>Oklahoma Homeowner Note:</strong> Oklahoma ranks among the top states for hail damage. We recommend Impact-Resistant (IR) rated shingles (Class 3 or 4) which may qualify you for an insurance premium discount of 15-28%. R&amp;R Roofing installs hail-rated materials on every project.
+      </div>
+    </div>
+
+    <div class="comparison-card" id="comparisonCard">
+      <div class="comparison-title">How You Compare to Oklahoma Averages</div>
+      <div class="comparison-bars">
+        <div>
+          <div class="comparison-item-label">Your Estimate (midpoint)</div>
+          <div class="comparison-bar-bg">
+            <div class="comparison-bar-fill yours" id="barYours"></div>
+          </div>
+          <div class="comparison-value" id="valYours">-</div>
+        </div>
+        <div>
+          <div class="comparison-item-label">Oklahoma State Average</div>
+          <div class="comparison-bar-bg">
+            <div class="comparison-bar-fill avg" id="barAvg"></div>
+          </div>
+          <div class="comparison-value" id="valAvg">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="start-over">
+      <button onclick="resetEstimator()">&#8634; Start Over</button>
+    </div>
+
+  </div><!-- /results-section -->
+
 </div><!-- /container -->
+
+<footer class="footer">
+  &copy; 2026 R&amp;R Roofing and Construction &middot; <a href="https://rnrroofingok.com">rnrroofingok.com</a> &middot; Oklahoma Licensed &amp; Insured<br>
+  Estimates are for general budgeting purposes only. Actual costs may vary based on site inspection.
+</footer>
 
 </body>
 </html>
