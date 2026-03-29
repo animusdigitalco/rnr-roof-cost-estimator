@@ -1112,5 +1112,204 @@ input[type="range"]::-moz-range-thumb {
   Estimates are for general budgeting purposes only. Actual costs may vary based on site inspection.
 </footer>
 
+<script>
+// ── State ──
+const state = {
+  sqft: 2000,
+  stories: null,
+  current: null,
+  newmat: null,
+  complexity: null
+};
+let currentStep = 1;
+
+// ── Pricing Data ──
+const pricing = {
+  '3tab':  { low: 3.50, high: 4.50 },
+  'arch':  { low: 4.50, high: 6.50 },
+  'metal': { low: 8.00, high: 14.00 },
+  'tile':  { low: 10.00, high: 18.00 },
+  'wood':  { low: 6.00, high: 10.00 },
+  'flat':  { low: 5.00, high: 8.00 }
+};
+
+const storiesMultiplier = { '1': 1, '1.5': 1.1, '2': 1.2, '2.5': 1.35 };
+const complexityMultiplier = { 'simple': 1, 'moderate': 1.15, 'complex': 1.3 };
+
+// ── Slider Logic ──
+const sqftSlider = document.getElementById('sqftSlider');
+const sqftDisplay = document.getElementById('sqftDisplay');
+const sqftManual = document.getElementById('sqftManual');
+
+function updateSqft(val) {
+  val = Math.max(800, Math.min(5000, parseInt(val) || 800));
+  state.sqft = val;
+  sqftDisplay.innerHTML = val.toLocaleString() + ' <span>sq ft</span>';
+  sqftSlider.value = val;
+  sqftManual.value = val;
+  // Update slider gradient
+  const pct = ((val - 800) / (5000 - 800)) * 100;
+  sqftSlider.style.background = `linear-gradient(to right, var(--blue) ${pct}%, #e0e2e8 ${pct}%)`;
+}
+
+sqftSlider.addEventListener('input', function() { updateSqft(this.value); });
+sqftManual.addEventListener('input', function() { updateSqft(this.value); });
+sqftManual.addEventListener('blur', function() { updateSqft(this.value); });
+updateSqft(2000);
+
+// ── Option Selection ──
+function selectOption(type, el) {
+  const val = el.dataset.value;
+  state[type === 'newmat' ? 'newmat' : type] = val;
+
+  // Clear siblings
+  const parent = el.parentElement;
+  parent.querySelectorAll('.option-card, .complexity-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  // Enable next button
+  const btnMap = { stories: 'btn2', current: 'btn3', newmat: 'btn4', complexity: 'btn5' };
+  const btn = document.getElementById(btnMap[type]);
+  if (btn) btn.disabled = false;
+}
+
+// ── Step Navigation ──
+function goToStep(step) {
+  const oldStep = document.getElementById('step' + currentStep);
+  const newStep = document.getElementById('step' + step);
+
+  oldStep.classList.remove('active');
+  newStep.classList.add('active');
+  currentStep = step;
+  updateProgress();
+}
+
+function updateProgress() {
+  const dots = document.querySelectorAll('.progress-dot');
+  const fill = document.getElementById('progressFill');
+  dots.forEach((dot, i) => {
+    const s = i + 1;
+    dot.classList.remove('active', 'done');
+    if (s < currentStep) dot.classList.add('done');
+    else if (s === currentStep) dot.classList.add('active');
+  });
+  const pct = ((currentStep - 1) / 4) * 100;
+  fill.style.width = pct + '%';
+}
+
+// ── Calculate ──
+function calculateResults() {
+  const sqft = state.sqft;
+  const roofSqft = sqft * 1.15; // pitch/waste factor
+  const sMult = storiesMultiplier[state.stories] || 1;
+  const cMult = complexityMultiplier[state.complexity] || 1;
+  const mat = pricing[state.newmat];
+
+  if (!mat) return;
+
+  // Tear-off
+  const tearLow = roofSqft * 1.00 * sMult;
+  const tearHigh = roofSqft * 1.50 * sMult;
+
+  // Totals
+  const totalLow = roofSqft * mat.low * sMult * cMult + tearLow;
+  const totalHigh = roofSqft * mat.high * sMult * cMult + tearHigh;
+
+  // Breakdown proportionally from total
+  const avgLow = totalLow;
+  const avgHigh = totalHigh;
+
+  const bkMatLow = avgLow * 0.40;
+  const bkMatHigh = avgHigh * 0.40;
+  const bkLabLow = avgLow * 0.35;
+  const bkLabHigh = avgHigh * 0.35;
+  const bkTearLow = tearLow;
+  const bkTearHigh = tearHigh;
+  const bkDispLow = avgLow * 0.08;
+  const bkDispHigh = avgHigh * 0.08;
+
+  // Adjust totals to sum of breakdown
+  const finalLow = bkMatLow + bkLabLow + bkTearLow + bkDispLow;
+  const finalHigh = bkMatHigh + bkLabHigh + bkTearHigh + bkDispHigh;
+
+  // Display
+  document.getElementById('priceRange').innerHTML = fmt(finalLow) + ' <span class="dash">&ndash;</span> ' + fmt(finalHigh);
+  document.getElementById('bkMaterials').textContent = fmt(bkMatLow) + ' - ' + fmt(bkMatHigh);
+  document.getElementById('bkLabor').textContent = fmt(bkLabLow) + ' - ' + fmt(bkLabHigh);
+  document.getElementById('bkTearoff').textContent = fmt(bkTearLow) + ' - ' + fmt(bkTearHigh);
+  document.getElementById('bkDisposal').textContent = fmt(bkDispLow) + ' - ' + fmt(bkDispHigh);
+  document.getElementById('bkTotal').textContent = fmt(finalLow) + ' - ' + fmt(finalHigh);
+
+  // Comparison (OK avg for architectural shingle ~$9,500 for 2000 sq ft home)
+  const okAvg = 9500;
+  const midpoint = (finalLow + finalHigh) / 2;
+  const maxBar = Math.max(midpoint, okAvg) * 1.15;
+
+  document.getElementById('valYours').textContent = fmt(midpoint);
+  document.getElementById('valAvg').textContent = fmt(okAvg);
+
+  // Show results
+  document.getElementById('wizardCard').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('resultsSection').classList.add('active');
+
+  // Animate bars after a beat
+  setTimeout(() => {
+    document.getElementById('barYours').style.width = ((midpoint / maxBar) * 100) + '%';
+    document.getElementById('barAvg').style.width = ((okAvg / maxBar) * 100) + '%';
+  }, 300);
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function fmt(n) {
+  return '$' + Math.round(n).toLocaleString();
+}
+
+// ── Form Submit ──
+function handleFormSubmit(e) {
+  e.preventDefault();
+  document.getElementById('ctaForm').style.display = 'none';
+  document.getElementById('thankYou').classList.add('active');
+}
+
+// ── Reset ──
+function resetEstimator() {
+  state.stories = null;
+  state.current = null;
+  state.newmat = null;
+  state.complexity = null;
+  currentStep = 1;
+
+  // Reset selections
+  document.querySelectorAll('.option-card, .complexity-card').forEach(c => c.classList.remove('selected'));
+  ['btn2','btn3','btn4','btn5'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.disabled = true;
+  });
+
+  // Reset bars
+  document.getElementById('barYours').style.width = '0';
+  document.getElementById('barAvg').style.width = '0';
+
+  // Reset form
+  document.getElementById('ctaForm').style.display = '';
+  document.getElementById('ctaForm').reset();
+  document.getElementById('thankYou').classList.remove('active');
+
+  // Show wizard
+  document.querySelectorAll('.step').forEach(s => { s.classList.remove('active'); s.style.animation = ''; });
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('wizardCard').style.display = '';
+  document.getElementById('progressWrap').style.display = '';
+  document.getElementById('resultsSection').classList.remove('active');
+  updateProgress();
+  updateSqft(2000);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
 </body>
 </html>
