@@ -318,6 +318,73 @@ input[type="range"]::-moz-range-thumb {
   color: #999;
   line-height: 1.4;
 }
+.option-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--blue);
+  margin-top: 6px;
+}
+
+/* ── Complexity visual ── */
+.complexity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.complexity-card {
+  background: var(--bg);
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 22px 14px 18px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+  position: relative;
+}
+.complexity-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-2px);
+}
+.complexity-card.selected {
+  border-color: var(--blue);
+  background: #eaf7fd;
+}
+.complexity-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  background: var(--blue);
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.complexity-visual {
+  margin-bottom: 12px;
+  height: 56px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.complexity-visual svg { width: 80px; height: 56px; }
+.complexity-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+.complexity-desc {
+  font-size: 0.75rem;
+  color: #888;
+  line-height: 1.4;
+}
 
 /* ── Buttons ── */
 .btn-row {
@@ -362,6 +429,18 @@ input[type="range"]::-moz-range-thumb {
   padding: 14px 20px;
 }
 .btn-back:hover { color: var(--dark); }
+.btn-calculate {
+  background: var(--blue);
+  color: var(--white);
+  font-size: 1.05rem;
+  padding: 16px 40px;
+  margin-left: auto;
+}
+.btn-calculate:hover {
+  background: #009ad6;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0,174,239,0.35);
+}
 </style>
 </head>
 <body>
@@ -450,6 +529,144 @@ input[type="range"]::-moz-range-thumb {
       <div class="btn-row">
         <button class="btn btn-back" onclick="goToStep(1)">&larr; Back</button>
         <button class="btn btn-next" id="btn2" disabled onclick="goToStep(3)">Next <span>&rarr;</span></button>
+      </div>
+    </div>
+
+    <!-- Step 3: Current Material -->
+    <div class="step" id="step3">
+      <div class="step-title">What's on your roof now?</div>
+      <div class="step-subtitle">This affects tear-off difficulty and disposal costs.</div>
+      <div class="options-grid" id="currentGrid">
+        <div class="option-card" data-value="3tab" onclick="selectOption('current', this)">
+          <div class="option-icon">&#9638;</div>
+          <div class="option-label">3-Tab Shingle</div>
+          <div class="option-desc">Flat, uniform look</div>
+        </div>
+        <div class="option-card" data-value="arch" onclick="selectOption('current', this)">
+          <div class="option-icon">&#9650;</div>
+          <div class="option-label">Architectural Shingle</div>
+          <div class="option-desc">Dimensional, textured</div>
+        </div>
+        <div class="option-card" data-value="metal" onclick="selectOption('current', this)">
+          <div class="option-icon">&#11044;</div>
+          <div class="option-label">Metal</div>
+          <div class="option-desc">Standing seam or panels</div>
+        </div>
+        <div class="option-card" data-value="tile" onclick="selectOption('current', this)">
+          <div class="option-icon">&#9781;</div>
+          <div class="option-label">Tile</div>
+          <div class="option-desc">Clay or concrete</div>
+        </div>
+        <div class="option-card" data-value="wood" onclick="selectOption('current', this)">
+          <div class="option-icon">&#9632;</div>
+          <div class="option-label">Wood Shake</div>
+          <div class="option-desc">Natural wood</div>
+        </div>
+        <div class="option-card" data-value="flat" onclick="selectOption('current', this)">
+          <div class="option-icon">&#9644;</div>
+          <div class="option-label">Flat / TPO</div>
+          <div class="option-desc">Low-slope membrane</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="goToStep(2)">&larr; Back</button>
+        <button class="btn btn-next" id="btn3" disabled onclick="goToStep(4)">Next <span>&rarr;</span></button>
+      </div>
+    </div>
+
+    <!-- Step 4: New Material -->
+    <div class="step" id="step4">
+      <div class="step-title">What material do you want?</div>
+      <div class="step-subtitle">Choose your new roofing material. Pricing varies by type.</div>
+      <div class="options-grid" id="newGrid">
+        <div class="option-card" data-value="3tab" onclick="selectOption('newmat', this)">
+          <div class="option-icon">&#9638;</div>
+          <div class="option-label">3-Tab Shingle</div>
+          <div class="option-desc">Budget-friendly classic</div>
+          <div class="option-price">$3.50 - $4.50/sq ft</div>
+        </div>
+        <div class="option-card" data-value="arch" onclick="selectOption('newmat', this)">
+          <div class="option-icon">&#9650;</div>
+          <div class="option-label">Architectural Shingle</div>
+          <div class="option-desc">Most popular in OK</div>
+          <div class="option-price">$4.50 - $6.50/sq ft</div>
+        </div>
+        <div class="option-card" data-value="metal" onclick="selectOption('newmat', this)">
+          <div class="option-icon">&#11044;</div>
+          <div class="option-label">Metal Standing Seam</div>
+          <div class="option-desc">50+ year lifespan</div>
+          <div class="option-price">$8.00 - $14.00/sq ft</div>
+        </div>
+        <div class="option-card" data-value="tile" onclick="selectOption('newmat', this)">
+          <div class="option-icon">&#9781;</div>
+          <div class="option-label">Tile</div>
+          <div class="option-desc">Premium, long-lasting</div>
+          <div class="option-price">$10.00 - $18.00/sq ft</div>
+        </div>
+        <div class="option-card" data-value="wood" onclick="selectOption('newmat', this)">
+          <div class="option-icon">&#9632;</div>
+          <div class="option-label">Wood Shake</div>
+          <div class="option-desc">Natural beauty</div>
+          <div class="option-price">$6.00 - $10.00/sq ft</div>
+        </div>
+        <div class="option-card" data-value="flat" onclick="selectOption('newmat', this)">
+          <div class="option-icon">&#9644;</div>
+          <div class="option-label">Flat / TPO</div>
+          <div class="option-desc">Best for low-slope</div>
+          <div class="option-price">$5.00 - $8.00/sq ft</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="goToStep(3)">&larr; Back</button>
+        <button class="btn btn-next" id="btn4" disabled onclick="goToStep(5)">Next <span>&rarr;</span></button>
+      </div>
+    </div>
+
+    <!-- Step 5: Complexity -->
+    <div class="step" id="step5">
+      <div class="step-title">How complex is your roof?</div>
+      <div class="step-subtitle">More angles, dormers, and valleys increase labor time.</div>
+      <div class="complexity-grid" id="complexityGrid">
+        <div class="complexity-card" data-value="simple" onclick="selectOption('complexity', this)">
+          <div class="complexity-visual">
+            <svg viewBox="0 0 80 56">
+              <polygon points="10,48 40,12 70,48" fill="none" stroke="#24262b" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="6" y1="48" x2="74" y2="48" stroke="#24262b" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="complexity-label">Simple</div>
+            <div class="complexity-desc">Basic gable, few or no dormers, minimal valleys</div>
+          </div>
+        </div>
+        <div class="complexity-card" data-value="moderate" onclick="selectOption('complexity', this)">
+          <div class="complexity-visual">
+            <svg viewBox="0 0 80 56">
+              <polyline points="6,48 20,20 34,38 50,10 64,38 74,48" fill="none" stroke="#24262b" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="6" y1="48" x2="74" y2="48" stroke="#24262b" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="complexity-label">Moderate</div>
+            <div class="complexity-desc">Hip roof, a few valleys, 1-2 dormers or features</div>
+          </div>
+        </div>
+        <div class="complexity-card" data-value="complex" onclick="selectOption('complexity', this)">
+          <div class="complexity-visual">
+            <svg viewBox="0 0 80 56">
+              <polyline points="4,48 12,28 20,38 28,16 36,32 44,8 52,30 60,18 68,36 76,48" fill="none" stroke="#24262b" stroke-width="2.5" stroke-linejoin="round"/>
+              <line x1="4" y1="48" x2="76" y2="48" stroke="#24262b" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="complexity-label">Complex</div>
+            <div class="complexity-desc">Multiple valleys, steep pitch, dormers, skylights, etc.</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-back" onclick="goToStep(4)">&larr; Back</button>
+        <button class="btn btn-calculate" id="btn5" disabled onclick="calculateResults()">Get My Estimate &#10132;</button>
       </div>
     </div>
 
