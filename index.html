@@ -33,9 +33,177 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ── Header ── */
+.header {
+  background: var(--white);
+  padding: 16px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header img { height: 48px; width: auto; }
+.header-phone {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--blue);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.header-phone:hover { color: var(--dark); }
+.header-phone svg { width: 18px; height: 18px; }
+
+/* ── Container ── */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+/* ── Hero ── */
+.hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.hero h1 {
+  font-family: 'Cardo', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.hero p {
+  font-size: 1.05rem;
+  color: #5a5d63;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ── Progress Bar ── */
+.progress-wrap {
+  margin-bottom: 32px;
+}
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 8px;
+}
+.progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #e0e2e8;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+.progress-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 3px;
+  background: var(--blue);
+  transform: translateY(-50%);
+  z-index: 1;
+  transition: width var(--transition);
+  border-radius: 2px;
+}
+.progress-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 3px solid #e0e2e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #b0b3ba;
+  z-index: 2;
+  transition: all var(--transition);
+}
+.progress-dot.active {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: #eaf7fd;
+}
+.progress-dot.done {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--white);
+}
+.progress-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #999;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
 </style>
 </head>
 <body>
+
+<!-- Header -->
+<header class="header">
+  <a href="https://rnrroofingok.com">
+    <img src="https://rnrroofingok.com/wp-content/uploads/2026/01/R-R-768x481.png" alt="R&R Roofing and Construction">
+  </a>
+  <a href="tel:9183793710" class="header-phone">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1.003 1.003 0 011.01-.24c1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.1.31.03.66-.25 1.01l-2.2 2.21z"/></svg>
+    (918) 379-3710
+  </a>
+</header>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Roof Replacement Cost Estimator</h1>
+    <p>Get an instant ballpark estimate for your Oklahoma roof replacement in under 60 seconds.</p>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-steps">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      <div class="progress-dot active" data-step="1">1</div>
+      <div class="progress-dot" data-step="2">2</div>
+      <div class="progress-dot" data-step="3">3</div>
+      <div class="progress-dot" data-step="4">4</div>
+      <div class="progress-dot" data-step="5">5</div>
+    </div>
+  </div>
+
+  <!-- Wizard Card -->
+  <div class="card" id="wizardCard">
+  </div>
+
+</div><!-- /container -->
 
 </body>
 </html>
