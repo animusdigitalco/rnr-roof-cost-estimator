@@ -168,8 +168,18 @@ body {
 /* ── Steps ── */
 .step {
   display: none;
+  animation: fadeSlideIn 0.4s ease forwards;
 }
 .step.active { display: block; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-16px); }
+}
 
 .step-title {
   font-family: 'Cardo', serif;
@@ -444,7 +454,7 @@ input[type="range"]::-moz-range-thumb {
 
 /* ── Results ── */
 .results-section { display: none; }
-.results-section.active { display: block; }
+.results-section.active { display: block; animation: fadeSlideIn 0.5s ease forwards; }
 
 .price-hero {
   text-align: center;
@@ -732,7 +742,7 @@ input[type="range"]::-moz-range-thumb {
 
 /* ── Thank You ── */
 .thank-you { display: none; text-align: center; padding: 40px 20px; }
-.thank-you.active { display: block; }
+.thank-you.active { display: block; animation: fadeSlideIn 0.4s ease forwards; }
 .thank-you-icon { font-size: 3rem; margin-bottom: 16px; }
 .thank-you h3 {
   font-family: 'Cardo', serif;
@@ -768,6 +778,33 @@ input[type="range"]::-moz-range-thumb {
 }
 .footer a { color: var(--blue); text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .container { padding: 20px 14px 48px; }
+  .hero h1 { font-size: 1.65rem; }
+  .card { padding: 28px 20px; }
+  .options-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .complexity-grid { grid-template-columns: 1fr; gap: 10px; }
+  .complexity-card { display: flex; align-items: center; gap: 16px; text-align: left; padding: 16px; }
+  .complexity-visual { height: 40px; margin-bottom: 0; }
+  .complexity-visual svg { width: 50px; height: 40px; }
+  .price-hero-range { font-size: 1.9rem; }
+  .btn { padding: 12px 24px; font-size: 0.88rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .cta-phone { font-size: 1.25rem; }
+  .breakdown-card { padding: 22px 18px 16px; }
+  .cta-section { padding: 28px 20px; }
+  .option-card { padding: 14px 10px; }
+  .option-label { font-size: 0.78rem; }
+  .option-desc { font-size: 0.72rem; }
+  .slider-value { font-size: 2.2rem; }
+  .progress-dot { width: 28px; height: 28px; font-size: 0.65rem; }
+}
+
+@media (max-width: 380px) {
+  .options-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -1178,10 +1215,15 @@ function goToStep(step) {
   const oldStep = document.getElementById('step' + currentStep);
   const newStep = document.getElementById('step' + step);
 
-  oldStep.classList.remove('active');
-  newStep.classList.add('active');
-  currentStep = step;
-  updateProgress();
+  oldStep.style.animation = 'fadeSlideOut 0.25s ease forwards';
+  setTimeout(() => {
+    oldStep.classList.remove('active');
+    oldStep.style.animation = '';
+    newStep.classList.add('active');
+    newStep.style.animation = 'fadeSlideIn 0.4s ease forwards';
+    currentStep = step;
+    updateProgress();
+  }, 200);
 }
 
 function updateProgress() {
@@ -1207,15 +1249,28 @@ function calculateResults() {
 
   if (!mat) return;
 
+  // Material cost (about 40% of total)
+  const matLow = roofSqft * mat.low * 0.40 * sMult * cMult;
+  const matHigh = roofSqft * mat.high * 0.40 * sMult * cMult;
+
+  // Labor (about 35% of total)
+  const labLow = roofSqft * mat.low * 0.35 * sMult * cMult;
+  const labHigh = roofSqft * mat.high * 0.35 * sMult * cMult;
+
   // Tear-off
   const tearLow = roofSqft * 1.00 * sMult;
   const tearHigh = roofSqft * 1.50 * sMult;
 
-  // Totals
+  // Disposal (about 10% of material+labor subtotal)
+  const dispLow = (matLow + labLow) * 0.10;
+  const dispHigh = (matHigh + labHigh) * 0.10;
+
+  // Totals — but also ensure the total aligns with the per-sq-ft pricing
+  // Total = material cost full rate * roof sqft * multipliers + tear-off
   const totalLow = roofSqft * mat.low * sMult * cMult + tearLow;
   const totalHigh = roofSqft * mat.high * sMult * cMult + tearHigh;
 
-  // Breakdown proportionally from total
+  // Recalculate breakdown proportionally from total
   const avgLow = totalLow;
   const avgHigh = totalHigh;
 
